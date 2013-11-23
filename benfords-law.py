@@ -17,11 +17,15 @@ class benfords_law:
 			if word[0].isdigit():
 				self.digits_histogram[int(word[0])] += 1
 
-	def calculate_frequencies(self):
-		digits_frequencies = digits()
+	def count_numbers(self):
 		numbers_count = 0
 		for count in self.digits_histogram.itervalues():
 			numbers_count += count
+		return numbers_count
+
+	def calculate_frequencies(self):
+		digits_frequencies = digits()
+		numbers_count = self.count_numbers()
 		for digit, count in self.digits_histogram.iteritems():
 			digits_frequencies[digit] = count * 100 / numbers_count
 		return digits_frequencies
