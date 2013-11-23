@@ -19,11 +19,11 @@ class benfords_law:
 
 	def calculate_frequencies(self):
 		digits_frequencies = digits()
-		all_digits_count = 0
+		numbers_count = 0
 		for count in self.digits_histogram.itervalues():
-			all_digits_count += count
+			numbers_count += count
 		for digit, count in self.digits_histogram.iteritems():
-			digits_frequencies[digit] = count * 100 / all_digits_count
+			digits_frequencies[digit] = count * 100 / numbers_count
 		return digits_frequencies
 
 	def get_result(self):
