@@ -5,16 +5,20 @@ import unittest
 def format_result(digits_histogram, digits_frequencies, passed_benfords_law):
 	return str(digits_histogram) + "\n" + str(digits_frequencies) + "\n" + passed_benfords_law + "\n"
 
+def digits():
+	return {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
+
 class benfords_law:
+
 	def __init__(self, text):
 		words = text.split()
-		self.digits_histogram = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
+		self.digits_histogram = digits()
 		for word in words:
 			if word[0].isdigit():
 				self.digits_histogram[int(word[0])] += 1
 
 	def calculate_frequencies(self):
-		digits_frequencies = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
+		digits_frequencies = digits()
 		all_digits_count = 0
 		for digit, count in self.digits_histogram.iteritems():
 			all_digits_count += count
