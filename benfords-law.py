@@ -2,8 +2,8 @@
 
 import unittest
 
-def format_result(digits, whether_passed):
-	return str(digits) + "\n" + whether_passed + "\n"
+def format_result(digits, passed_benfords_law):
+	return str(digits) + "\n" + passed_benfords_law + "\n"
 
 class benfords_law:
 	def __init__(self, text):
