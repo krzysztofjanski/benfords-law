@@ -16,9 +16,8 @@ class benfords_law:
 		self.numbers_count = self.count_numbers()
 
 	def calculate_histogram(self):
-		words = self.text.split()
 		self.digits_histogram = digits()
-		for word in words:
+		for word in self.text.split():
 			if word[0].isdigit():
 				self.digits_histogram[int(word[0])] += 1
 
