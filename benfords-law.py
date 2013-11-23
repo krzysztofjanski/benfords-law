@@ -20,7 +20,7 @@ class benfords_law:
 	def calculate_frequencies(self):
 		digits_frequencies = digits()
 		all_digits_count = 0
-		for digit, count in self.digits_histogram.iteritems():
+		for count in self.digits_histogram.itervalues():
 			all_digits_count += count
 		for digit, count in self.digits_histogram.iteritems():
 			digits_frequencies[digit] = count * 100 / all_digits_count
