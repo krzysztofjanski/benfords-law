@@ -18,7 +18,7 @@ class benfords_law:
 	def calculate_histogram(self):
 		self.digits_histogram = digits()
 		for word in self.text.split():
-			if word[0].isdigit():
+			if word[0].isdigit(): # TODO is not a date
 				self.digits_histogram[int(word[0])] += 1
 
 	def count_numbers(self):
