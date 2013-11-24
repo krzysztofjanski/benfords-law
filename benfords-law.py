@@ -26,6 +26,16 @@ def digits():
 def benfords_frequncy_distribution():
 	return {x: math.log(1 + (1/x), 10) for x in range (1, 10)}
 
+def calculate_frequncies_from_histogram(histogram):
+	count = 0
+	for c in histogram.itervalues():
+		count += c
+	frequencies  = dict()
+	for k,v in histogram.iteritems():
+		frequencies[k] = v * 100 / count
+	return frequencies
+
+
 class benfords_law:
 
 	def __init__(self, text):
@@ -83,5 +93,11 @@ class test_format_result(unittest.TestCase):
 			output += str(digit) + ":\t" + str(digits_histogram[digit]) + "\t"
 			output += str(digits_frequencies[digit]) + "\t" + str(bfd[digit]) + "\t" + str(digits_passed[digit]) + "\n"
 		self.assertEqual(output, format_result(r))
+
+class test_calculate_frequncies_from_histogram(unittest.TestCase):
+	def test_two_positions(self):
+		histogram = {1: 2, 2: 18}
+		frequencies = {1: 10, 2: 90}
+		self.assertEqual(frequencies, calculate_frequncies_from_histogram(histogram))
 
 unittest.main()
