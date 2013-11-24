@@ -17,9 +17,6 @@ class result:
 			output += str(self.frequencies[digit]) + "\t" + str(bfd[digit]) + "\t" + str(self.passed[digit]) + "\n"
 		return output
 
-def format_result(r):
-	return str(r)
-
 def digits():
 	return {x: 0 for x in range(1, 10)}
 
@@ -65,7 +62,7 @@ class test_calculate_benfords_histogram_from_text(unittest.TestCase):
 		digits_histogram = {1:1, 2:1, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
 		self.assertEqual(calculate_benfords_histogram_from_text(text), digits_histogram)
 
-class test_format_result(unittest.TestCase):
+class test_result_str(unittest.TestCase):
 	def test_print(self):
 		digits_histogram = {x: x for x in range(1, 10)}
 		digits_frequencies = {x: 10 - x for x in range(1, 10)}
@@ -76,7 +73,7 @@ class test_format_result(unittest.TestCase):
 		for digit in range(1, 10):
 			output += str(digit) + ":\t" + str(digits_histogram[digit]) + "\t"
 			output += str(digits_frequencies[digit]) + "\t" + str(bfd[digit]) + "\t" + str(digits_passed[digit]) + "\n"
-		self.assertEqual(output, format_result(r))
+		self.assertEqual(output, str(r))
 
 class test_calculate_frequncies_from_histogram(unittest.TestCase):
 	def test_two_positions(self):
