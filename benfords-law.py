@@ -4,9 +4,9 @@ import unittest
 import math
 
 class result:
-	def __init__(self, histogram, frequancies, passed):
+	def __init__(self, histogram, frequencies, passed):
 		self.histogram = histogram
-		self.frequencies = frequancies
+		self.frequencies = frequencies
 		self.passed = passed
 
 	def __str__(self):
@@ -21,7 +21,7 @@ def format_result(r):
 	return str(r)
 
 def digits():
-	return {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
+	return {x: 0 for x in range(1, 10)}
 
 def benfords_frequncy_distribution():
 	return {x: math.log(1 + (1/x), 10) for x in range (1, 10)}
@@ -35,21 +35,24 @@ def calculate_frequncies_from_histogram(histogram):
 		frequencies[k] = v * 100 / count
 	return frequencies
 
+def calculate_benfords_histogram_from_text(text):
+	digits_histogram = digits()
+	for word in text.split():
+		if word[0].isdigit(): # TODO is not a date
+			digits_histogram[int(word[0])] += 1
+	return digits_histogram
 
 class benfords_law:
 
 	def __init__(self, text):
 		self.text = text
-		self.calculate_histogram()
 
 	def calculate_histogram(self):
-		self.digits_histogram = digits()
-		for word in self.text.split():
-			if word[0].isdigit(): # TODO is not a date
-				self.digits_histogram[int(word[0])] += 1
+		return calculate_benfords_histogram_from_text(self.text)
 
 	def get_result(self):
-		return format_result(result(self.digits_histogram, calculate_frequncies_from_histogram(self.digits_histogram), {x: False for x in range (1, 10)}))
+		histogram = self.calculate_histogram()
+		return format_result(result(histogram, calculate_frequncies_from_histogram(histogram), {x: False for x in range (1, 10)}))
 
 class test_benfords_law(unittest.TestCase):
 	def test_one_number(self):
@@ -67,6 +70,17 @@ class test_benfords_law(unittest.TestCase):
 		digits_passed = {x: False for x in range (1, 10)}
 		r = result(digits_histogram, digits_frequencies, digits_passed)
 		self.assertEqual(benfords_law(text).get_result(), format_result(r))
+
+class test_calculate_benfords_histogram_from_text(unittest.TestCase):
+	def test_one_number(self):
+		text = "12345"
+		digits_histogram = {1:1, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
+		self.assertEqual(calculate_benfords_histogram_from_text(text), digits_histogram)
+
+	def test_two_numbers_separated_by_space(self):
+		text = "12345 234"
+		digits_histogram = {1:1, 2:1, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
+		self.assertEqual(calculate_benfords_histogram_from_text(text), digits_histogram)
 
 class test_format_result(unittest.TestCase):
 	def test_print(self):
