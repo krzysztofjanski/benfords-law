@@ -39,9 +39,9 @@ def calculate_benfords_histogram_from_text(text):
 			digits_histogram[int(word[0])] += 1
 	return digits_histogram
 
-def benfords_law_test_for_digits_frequencies(frequencies):
+def benfords_law_test_for_digits_frequencies(frequencies, treshold = 0):
 	bfd = benfords_frequncy_distribution()
-	return {x: frequencies[x] == bfd[x] for x in range(1, 10)}
+	return {x: math.fabs(frequencies[x] - bfd[x]) <= treshold for x in range(1, 10)}
 
 class benfords_law:
 
@@ -99,5 +99,15 @@ class test_benfords_law_test_for_digits_frequencies(unittest.TestCase):
 			frequencies[i] = bfd[i]
 			marks[i] = True
 		self.assertEqual(marks, benfords_law_test_for_digits_frequencies(frequencies))
+
+	def test_two_passed_with_treshold(self):
+		frequencies = {x: 10 for x in range(1, 10)}
+		marks = {x: False for x in range(1, 10)}
+		bfd = benfords_frequncy_distribution()
+		frequencies[2] = bfd[2] + 1
+		marks[2] = True
+		frequencies[7] = bfd[7] - 1
+		marks[7] = True
+		self.assertEqual(marks, benfords_law_test_for_digits_frequencies(frequencies, 1))
 
 unittest.main()
