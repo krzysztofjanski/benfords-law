@@ -9,13 +9,16 @@ class result:
 		self.frequencies = frequancies
 		self.passed = passed
 
-def format_result(result):
-	output = ""
-	bfd = benfords_frequncy_distribution()
-	for digit in range(1, 10):
-		output += str(digit) + ":\t" + str(result.histogram[digit]) + "\t"
-		output += str(result.frequencies[digit]) + "\t" + str(bfd[digit]) + "\t" + str(result.passed[digit]) + "\n"
-	return output
+	def __str__(self):
+		output = ""
+		bfd = benfords_frequncy_distribution()
+		for digit in range(1, 10):
+			output += str(digit) + ":\t" + str(self.histogram[digit]) + "\t"
+			output += str(self.frequencies[digit]) + "\t" + str(bfd[digit]) + "\t" + str(self.passed[digit]) + "\n"
+		return output
+
+def format_result(r):
+	return str(r)
 
 def digits():
 	return {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
