@@ -1,12 +1,16 @@
 #!/usr/bin/python
 
 import unittest
+import math
 
 def format_result(digits_histogram, digits_frequencies, has_passed_benfords_law):
 	return str(digits_histogram) + "\n" + str(digits_frequencies) + "\n" + has_passed_benfords_law + "\n"
 
 def digits():
 	return {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
+
+def benfords_frequncy_distribution():
+	return {x: math.log(1 + (1/x), 10)}
 
 class benfords_law:
 
