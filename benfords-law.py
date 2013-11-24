@@ -32,11 +32,18 @@ def calculate_frequncies_from_histogram(histogram):
 		frequencies[k] = v * 100 / count
 	return frequencies
 
+def skip_zeros(word):
+	i = 0;
+	while i < len(word) and word[i].isdigit() and int(word[i]) == 0: i += 1
+	if i < len(word) and word[i].isdigit(): return i
+	return None
+
 def calculate_benfords_histogram_from_text(text):
 	digits_histogram = digits()
 	for word in text.split():
-		if word[0].isdigit(): # TODO is not a date
-			digits_histogram[int(word[0])] += 1
+		i = skip_zeros(word)
+		if i != None: # TODO is not a date
+			digits_histogram[int(word[i])] += 1
 	return digits_histogram
 
 def benfords_law_test_for_digits_frequencies(frequencies, treshold = 0):
@@ -64,6 +71,21 @@ class test_calculate_benfords_histogram_from_text(unittest.TestCase):
 	def test_two_numbers_separated_by_space(self):
 		text = "12345 234"
 		digits_histogram = {1:1, 2:1, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
+		self.assertEqual(calculate_benfords_histogram_from_text(text), digits_histogram)
+
+	def test_number_among_words(self):
+		text = "abc 987 zdf"
+		digits_histogram = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:1}
+		self.assertEqual(calculate_benfords_histogram_from_text(text), digits_histogram)
+
+	def test_number_with_dot_colon(self):
+		text = "2,34 5.34"
+		digits_histogram = {1:0, 2:1, 3:0, 4:0, 5:1, 6:0, 7:0, 8:0, 9:0}
+		self.assertEqual(calculate_benfords_histogram_from_text(text), digits_histogram)
+
+	def test_number_starting_from_zeros(self):
+		text = "00345"
+		digits_histogram = {1:0, 2:0, 3:1, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
 		self.assertEqual(calculate_benfords_histogram_from_text(text), digits_histogram)
 
 class test_result_str(unittest.TestCase):
