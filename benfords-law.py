@@ -54,23 +54,6 @@ class benfords_law:
 		histogram = self.calculate_histogram()
 		return format_result(result(histogram, calculate_frequncies_from_histogram(histogram), {x: False for x in range (1, 10)}))
 
-class test_benfords_law(unittest.TestCase):
-	def test_one_number(self):
-		text = "12345"
-		digits_histogram = {1:1, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
-		digits_frequencies = {1:100, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
-		digits_passed = {x: False for x in range (1, 10)}
-		r = result(digits_histogram, digits_frequencies, digits_passed)
-		self.assertEqual(benfords_law(text).get_result(), format_result(r))
-
-	def test_two_numbers_separated_by_space(self):
-		text = "12345 234"
-		digits_histogram = {1:1, 2:1, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
-		digits_frequencies = {1:50, 2:50, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
-		digits_passed = {x: False for x in range (1, 10)}
-		r = result(digits_histogram, digits_frequencies, digits_passed)
-		self.assertEqual(benfords_law(text).get_result(), format_result(r))
-
 class test_calculate_benfords_histogram_from_text(unittest.TestCase):
 	def test_one_number(self):
 		text = "12345"
