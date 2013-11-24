@@ -41,7 +41,6 @@ class benfords_law:
 	def __init__(self, text):
 		self.text = text
 		self.calculate_histogram()
-		self.numbers_count = self.count_numbers()
 
 	def calculate_histogram(self):
 		self.digits_histogram = digits()
@@ -49,20 +48,8 @@ class benfords_law:
 			if word[0].isdigit(): # TODO is not a date
 				self.digits_histogram[int(word[0])] += 1
 
-	def count_numbers(self):
-		numbers_count = 0
-		for count in self.digits_histogram.itervalues():
-			numbers_count += count
-		return numbers_count
-
-	def calculate_frequencies(self):
-		digits_frequencies = digits()
-		for digit, count in self.digits_histogram.iteritems():
-			digits_frequencies[digit] = count * 100 / self.numbers_count
-		return digits_frequencies
-
 	def get_result(self):
-		return format_result(result(self.digits_histogram, self.calculate_frequencies(), {x: False for x in range (1, 10)}))
+		return format_result(result(self.digits_histogram, calculate_frequncies_from_histogram(self.digits_histogram), {x: False for x in range (1, 10)}))
 
 class test_benfords_law(unittest.TestCase):
 	def test_one_number(self):
