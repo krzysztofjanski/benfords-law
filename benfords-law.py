@@ -2,6 +2,8 @@
 
 import unittest
 import math
+import argparse
+import sys
 
 class result:
 	def __init__(self, histogram, frequencies, passed):
@@ -137,4 +139,13 @@ class test_expected_distribution_test_for_digits_frequencies(unittest.TestCase):
 		marks[7] = True
 		self.assertEqual(marks, expected_distribution_test_for_digits_frequencies(expected, frequencies, 1))
 
-unittest.main()
+test_program_option = "--run-tests"
+parser = argparse.ArgumentParser(description="Check a text document against Benford's law.")
+parser.add_argument(test_program_option, dest='test', action='store_true',
+		help='run unit tests')
+
+args = parser.parse_args()
+
+if args.test:
+	sys.argv.remove(test_program_option)
+	unittest.main()
