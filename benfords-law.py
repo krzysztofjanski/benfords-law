@@ -46,9 +46,8 @@ def calculate_benfords_histogram_from_text(text):
 			digits_histogram[int(word[i])] += 1
 	return digits_histogram
 
-def benfords_law_test_for_digits_frequencies(frequencies, treshold = 0):
-	bfd = benfords_frequncy_distribution()
-	return {x: math.fabs(frequencies[x] - bfd[x]) <= treshold for x in range(1, 10)}
+def expected_distribution_test_for_digits_frequencies(expected, frequencies, treshold = 0):
+	return {x: math.fabs(frequencies[x] - expected[x]) <= treshold for x in range(1, 10)}
 
 class benfords_law:
 
@@ -107,29 +106,35 @@ class test_calculate_frequncies_from_histogram(unittest.TestCase):
 		frequencies = {1: 10, 2: 90}
 		self.assertEqual(frequencies, calculate_frequncies_from_histogram(histogram))
 
-class test_benfords_law_test_for_digits_frequencies(unittest.TestCase):
+class test_expected_distribution_test_for_digits_frequencies(unittest.TestCase):
 	def test_all_failed(self):
-		frequencies = {x: 10 for x in range(1, 10)}
+		frequencies = {x: 1 for x in range(1, 10)}
+		expected = {x: 2 for x in range(1, 10)}
 		marks = {x: False for x in range(1, 10)}
-		self.assertEqual(marks, benfords_law_test_for_digits_frequencies(frequencies))
+		self.assertEqual(marks, expected_distribution_test_for_digits_frequencies(expected, frequencies))
+
+	def test_all_passed(self):
+		frequencies = {x: 1 for x in range(1, 10)}
+		marks = {x: True for x in range(1, 10)}
+		self.assertEqual(marks, expected_distribution_test_for_digits_frequencies(frequencies, frequencies))
 
 	def test_two_passed(self):
-		frequencies = {x: 10 for x in range(1, 10)}
+		frequencies = {x: 1 for x in range(1, 10)}
+		expected = {x: 2 for x in range(1, 10)}
 		marks = {x: False for x in range(1, 10)}
-		bfd = benfords_frequncy_distribution()
 		for i in [2, 7]:
-			frequencies[i] = bfd[i]
+			frequencies[i] = expected[i]
 			marks[i] = True
-		self.assertEqual(marks, benfords_law_test_for_digits_frequencies(frequencies))
+		self.assertEqual(marks, expected_distribution_test_for_digits_frequencies(expected, frequencies))
 
 	def test_two_passed_with_treshold(self):
-		frequencies = {x: 10 for x in range(1, 10)}
+		frequencies = {x: 1 for x in range(1, 10)}
+		expected = {x: 3 for x in range(1, 10)}
 		marks = {x: False for x in range(1, 10)}
-		bfd = benfords_frequncy_distribution()
-		frequencies[2] = bfd[2] + 1
+		frequencies[2] = expected[2] + 1
 		marks[2] = True
-		frequencies[7] = bfd[7] - 1
+		frequencies[7] = expected[7] - 1
 		marks[7] = True
-		self.assertEqual(marks, benfords_law_test_for_digits_frequencies(frequencies, 1))
+		self.assertEqual(marks, expected_distribution_test_for_digits_frequencies(expected, frequencies, 1))
 
 unittest.main()
