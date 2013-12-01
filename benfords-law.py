@@ -35,7 +35,7 @@ def calculate_frequncies_from_histogram(histogram):
 		count += c
 	frequencies  = dict()
 	for k,v in histogram.iteritems():
-		frequencies[k] = float(v) * float(100) / float(count)
+		frequencies[k] = float(v) / float(count)
 	return frequencies
 
 def skip_minus(word):
@@ -120,7 +120,7 @@ class test_result_str(unittest.TestCase):
 class test_calculate_frequncies_from_histogram(unittest.TestCase):
 	def test_two_positions(self):
 		histogram = {1: 2, 2: 18}
-		frequencies = {1: 10, 2: 90}
+		frequencies = {1: 0.1, 2: 0.9}
 		self.assertEqual(frequencies, calculate_frequncies_from_histogram(histogram))
 
 class test_expected_distribution_test_for_digits_frequencies(unittest.TestCase):
