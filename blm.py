@@ -16,10 +16,10 @@ class result:
 		return output
 
 	def get_format(self):
-		return "{0:d}:\t{1:d}\t{2:f}\t{3:f}\t{4}\n"
+		return "{0:d}:\t{1:d}\t\t{2:f}\t{3:f}\t{4}\n"
 
 	def get_header(self):
-		return "d:\th\tf\t\tb\t\tp\n"
+		return "digit\thistogram\tfrequency\tbenfords\tpassed\n"
 
 def digits():
 	return {x: 0 for x in range(1, 10)}
