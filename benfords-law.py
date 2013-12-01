@@ -38,17 +38,22 @@ def calculate_frequncies_from_histogram(histogram):
 		frequencies[k] = float(v) * float(100) / float(count)
 	return frequencies
 
+def skip_minus(word):
+	if word[0] == '-': return 1
+	return 0
+
 def skip_zeros(word):
 	i = 0;
 	while i < len(word) and word[i].isdigit() and int(word[i]) == 0: i += 1
-	if i < len(word) and word[i].isdigit(): return i
-	return None
+	return i
 
 def calculate_benfords_histogram_from_text(text):
 	digits_histogram = digits()
 	for word in text.split():
-		i = skip_zeros(word)
-		if i != None: # TODO is not a date
+		i = 0
+		i += skip_minus(word)
+		i += skip_zeros(word)
+		if i < len(word) and word[i].isdigit(): # TODO is not a date
 			digits_histogram[int(word[i])] += 1
 	return digits_histogram
 
@@ -71,6 +76,11 @@ class benfords_law:
 class test_calculate_benfords_histogram_from_text(unittest.TestCase):
 	def test_one_number(self):
 		text = "12345"
+		digits_histogram = {1:1, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
+		self.assertEqual(calculate_benfords_histogram_from_text(text), digits_histogram)
+
+	def test_negative_number(self):
+		text = "-12345"
 		digits_histogram = {1:1, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
 		self.assertEqual(calculate_benfords_histogram_from_text(text), digits_histogram)
 
