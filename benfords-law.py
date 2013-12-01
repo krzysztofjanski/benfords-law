@@ -13,14 +13,17 @@ class result:
 		self.passed = passed
 
 	def __str__(self):
-		output = self.get_format()
+		output = self.get_header()
 		bfd = benfords_frequncy_distribution()
 		for digit in range(1, 10):
-			output += str(digit) + ":\t" + str(self.histogram[digit]) + "\t"
-			output += str(self.frequencies[digit]) + "\t" + str(bfd[digit]) + "\t" + str(self.passed[digit]) + "\n"
+			output += self.get_format().format(digit, self.histogram[digit], self.frequencies[digit],
+					bfd[digit], self.passed[digit])
 		return output
 
 	def get_format(self):
+		return "{0:d}:\t{1:d}\t{2:f}\t{3:f}\t{4}\n"
+
+	def get_header(self):
 		return "d:\th\tf\tb\tp\n"
 
 def digits():
@@ -111,10 +114,10 @@ class test_result_str(unittest.TestCase):
 		digits_passed = {x: (x % 2) == 0 for x in range(1, 10)}
 		r = result(digits_histogram, digits_frequencies, digits_passed)
 		bfd = benfords_frequncy_distribution()
-		output = r.get_format()
+		output = r.get_header()
 		for digit in range(1, 10):
-			output += str(digit) + ":\t" + str(digits_histogram[digit]) + "\t"
-			output += str(digits_frequencies[digit]) + "\t" + str(bfd[digit]) + "\t" + str(digits_passed[digit]) + "\n"
+			output += r.get_format().format(digit, digits_histogram[digit], digits_frequencies[digit],
+					bfd[digit], digits_passed[digit])
 		self.assertEqual(output, str(r))
 
 class test_calculate_frequncies_from_histogram(unittest.TestCase):
@@ -166,5 +169,5 @@ if args.test:
 	initial_argv.remove(test_program_option)
 	unittest.main(argv = initial_argv)
 else:
-	bl = benfords_law(sys.stdin.read(), 0)
+	bl = benfords_law(sys.stdin.read(), 0.01)
 	print bl.get_result()
