@@ -4,6 +4,7 @@ import unittest
 import math
 import argparse
 import sys
+import copy
 
 class result:
 	def __init__(self, histogram, frequencies, passed):
@@ -12,18 +13,21 @@ class result:
 		self.passed = passed
 
 	def __str__(self):
-		output = ""
+		output = self.get_format()
 		bfd = benfords_frequncy_distribution()
 		for digit in range(1, 10):
 			output += str(digit) + ":\t" + str(self.histogram[digit]) + "\t"
 			output += str(self.frequencies[digit]) + "\t" + str(bfd[digit]) + "\t" + str(self.passed[digit]) + "\n"
 		return output
 
+	def get_format(self):
+		return "d:\th\tf\tb\tp\n"
+
 def digits():
 	return {x: 0 for x in range(1, 10)}
 
 def benfords_frequncy_distribution():
-	return {x: math.log(1 + (1/x), 10) for x in range (1, 10)}
+	return {x: math.log(float(1) + (float(1)/float(x)), float(10)) for x in range (1, 10)}
 
 def calculate_frequncies_from_histogram(histogram):
 	count = 0
@@ -31,7 +35,7 @@ def calculate_frequncies_from_histogram(histogram):
 		count += c
 	frequencies  = dict()
 	for k,v in histogram.iteritems():
-		frequencies[k] = v * 100 / count
+		frequencies[k] = float(v) * float(100) / float(count)
 	return frequencies
 
 def skip_zeros(word):
@@ -53,15 +57,16 @@ def expected_distribution_test_for_digits_frequencies(expected, frequencies, tre
 
 class benfords_law:
 
-	def __init__(self, text):
+	def __init__(self, text, treshold = 0):
 		self.text = text
-
-	def calculate_histogram(self):
-		return calculate_benfords_histogram_from_text(self.text)
+		self.treshold = treshold
 
 	def get_result(self):
-		histogram = self.calculate_histogram()
-		return format_result(result(histogram, calculate_frequncies_from_histogram(histogram), {x: False for x in range (1, 10)}))
+		bfd = benfords_frequncy_distribution()
+		histogram = calculate_benfords_histogram_from_text(self.text)
+		frequencies = calculate_frequncies_from_histogram(histogram)
+		marks = expected_distribution_test_for_digits_frequencies(bfd, frequencies,	self.treshold)
+		return str(result(histogram, frequencies, marks))
 
 class test_calculate_benfords_histogram_from_text(unittest.TestCase):
 	def test_one_number(self):
@@ -92,11 +97,11 @@ class test_calculate_benfords_histogram_from_text(unittest.TestCase):
 class test_result_str(unittest.TestCase):
 	def test_print(self):
 		digits_histogram = {x: x for x in range(1, 10)}
-		digits_frequencies = {x: 10 - x for x in range(1, 10)}
+		digits_frequencies = {x: float(10) - float(x) for x in range(1, 10)}
 		digits_passed = {x: (x % 2) == 0 for x in range(1, 10)}
 		r = result(digits_histogram, digits_frequencies, digits_passed)
 		bfd = benfords_frequncy_distribution()
-		output = ""
+		output = r.get_format()
 		for digit in range(1, 10):
 			output += str(digit) + ":\t" + str(digits_histogram[digit]) + "\t"
 			output += str(digits_frequencies[digit]) + "\t" + str(bfd[digit]) + "\t" + str(digits_passed[digit]) + "\n"
@@ -139,6 +144,7 @@ class test_expected_distribution_test_for_digits_frequencies(unittest.TestCase):
 		marks[7] = True
 		self.assertEqual(marks, expected_distribution_test_for_digits_frequencies(expected, frequencies, 1))
 
+initial_argv = copy.deepcopy(sys.argv)
 test_program_option = "--run-tests"
 parser = argparse.ArgumentParser(description="Check a text document against Benford's law.")
 parser.add_argument(test_program_option, dest='test', action='store_true',
@@ -147,5 +153,8 @@ parser.add_argument(test_program_option, dest='test', action='store_true',
 args = parser.parse_args()
 
 if args.test:
-	sys.argv.remove(test_program_option)
-	unittest.main()
+	initial_argv.remove(test_program_option)
+	unittest.main(argv = initial_argv)
+else:
+	bl = benfords_law(sys.stdin.read(), 0)
+	print bl.get_result()
